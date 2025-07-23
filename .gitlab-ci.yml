@@ -34,10 +34,10 @@ build:
 test:
   stage: test
   script:
-    - python3 -m unittest MeanFieldPB/tests/volume_microgel_test.py
-    - python3 -m unittest MeanFieldPB/tests/surface_microgel_test.py
-    - python3 -m unittest MeanFieldPB/tests/linear_polyelec_test.py
-    - python3 -m unittest MeanFieldPB/tests/colloid_test.py
+    - python3 -m unittest tests/volume_microgel_test.py
+    - python3 -m unittest tests/surface_microgel_test.py
+    - python3 -m unittest tests/linear_polyelec_test.py
+    - python3 -m unittest tests/colloid_test.py
   tags:
     - docker
   # artifacts:
