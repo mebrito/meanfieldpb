@@ -1,0 +1,6 @@
+[project]
+name = "MeanFieldPB"
+version = "0.1.0"
+license = {text = "GNU GPLv3"}
+authors = [{name = "Mariano E. Brito", email = "mbrito@icp.uni-stuttgart.de"}]
+

@@ -1,0 +1,54 @@
+# Official language image.
+image: python:latest 
+
+stages:
+  - build
+  - test
+  # - deploy
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - python --version ; pip --version
+  - pip install --upgrade pip
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  # Install dependencies
+  - pip install -r requirements.txt
+
+build:
+  stage: build
+  script:
+    - echo "Building project..."
+  tags:
+    - docker
+
+test:
+  stage: test
+  script:
+    - python3 -m unittest MeanFieldPB/tests/volume_microgel_test.py
+    - python3 -m unittest MeanFieldPB/tests/surface_microgel_test.py
+    - python3 -m unittest MeanFieldPB/tests/linear_polyelec_test.py
+    - python3 -m unittest MeanFieldPB/tests/colloid_test.py
+  tags:
+    - docker
+  # artifacts:
+  #   when: always
+  #   reports:
+  #     junit: junit.xml  # optional, for test reports if you generate them
+
+# deploy:
+#   stage: deploy
+#   only:
+#     - main  # Only deploy on pushes to the main branch
+#   script:
+#     - echo "Deploying Python app..."
+#     # Insert your real deployment commands here
