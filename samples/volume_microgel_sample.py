@@ -1,6 +1,6 @@
 #
 # MeanFieldPB is a package for modeling the electrostatics of charge-equilibrated
-# colloidal suspensions using mean-field Poisson-Boltzmann equations.
+# colloidal and polymer suspensions using mean-field Poisson-Boltzmann equations.
 
 # Copyright (C) 2025 The MeanFieldPB Project
 
