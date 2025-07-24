@@ -123,11 +123,10 @@ Chain-like charged polymers. Models polyelectrolyte solutions and polymer-colloi
 
 All particle classes inherit from the base `Suspension` class and provide:
 
-- `elec_pot(r)`: Calculate electrostatic potential at distance r
-- `elec_field(r)`: Calculate electric field at distance r  
-- `n_plus(r)`: Calculate positive ion density at distance r
-- `n_minus(r)`: Calculate negative ion density at distance r
-- `charge_density(r)`: Calculate charge density distribution
+- `elec_pot`: Calculate electrostatic potential at distance r
+- `elec_field`: Calculate electric field at distance r
+- `cation_density()`: Calculate positive ion density at distance r
+- `anion_density()`: Calculate negative ion density at distance r
 
 ## Examples
 
