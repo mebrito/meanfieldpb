@@ -79,9 +79,9 @@ plt.show()
 
 # Plotting ion density profile
 n_diff = (my_suspension.cation_density() - my_suspension.anion_density()) * my_suspension.conversion_factor # Convert to [nm^-3]
-ref_data = np.genfromtxt(os.path.join(os.path.dirname(__file__), './ref_data_microgel.dat'), skip_header=7)
+ref_data = np.genfromtxt(os.path.join(os.path.dirname(__file__), './ref_data/microgel.dat'), skip_header=7)
 plt.plot(my_suspension.r/a0, n_diff*a0**3, label=r'meanFieldPB', lw=2, color=colors[0])
-plt.plot(ref_data[:, 0], ref_data[:, 1], label=r'reference Data', marker='o', markersize=4, lw=0, fillstyle='none', color=colors[1])
+plt.plot(ref_data[:, 0], ref_data[:, 1], label=r'reference data', marker='o', markersize=4, lw=0, fillstyle='none', color=colors[1])
 plt.axvline(x=alpha, color='gray', linestyle='--', label=r'microgel radius $a/a_0$', lw=1, alpha=0.5)
 plt.xlabel('$r/a_0$', fontsize=font_size)
 plt.ylabel(r"$[n_+(r) - n_-(r)]a_0^3$", fontsize=font_size)
