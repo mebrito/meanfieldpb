@@ -91,6 +91,8 @@ class Suspension(ABC):
     >>> print(f"Charge parameter: {suspension.Zlba:.2f}")
     """
 
+    _conversion_factor = 6.02214/10 # If the quatity is in molar, multiplication by this factor gives density in number of particles per nm^3
+    
     def __init__(self, a, Z, lb, c_salt, charge_type):
         """
         Base class for Suspension systems.
@@ -120,7 +122,6 @@ class Suspension(ABC):
         self.elec_pot = None  # Initialize electric potential elec_pot to None
         self.elec_field = None  # Initialize electric field elec_field to None
 
-        self._conversion_factor = 6.02214/10 # If the quatity is in molar, multiplication by this factor gives density in number of particles per nm^3
 
 
     @property

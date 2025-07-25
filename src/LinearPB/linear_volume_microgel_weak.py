@@ -23,6 +23,7 @@ import math, sys, os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from util import reservoir_concent, KaCref, csch, coth
+from suspension import Suspension
 
 def variables(a, lb, vol_frac, c_salt, Zmax_a, Zmax_b, pKa, pKb, pH, c_ref=1):
     """
@@ -45,7 +46,7 @@ def variables(a, lb, vol_frac, c_salt, Zmax_a, Zmax_b, pKa, pKb, pH, c_ref=1):
         reservoir pH
 
     """
-    conversion_factor = 6.02214/10 # If the quatity is in molar, multiplication by this factor gives density in number of particles per nm^3
+    conversion_factor = Suspension._conversion_factor # If the quatity is in molar, multiplication by this factor gives density in number of particles per nm^3
 
     R = (a**3 / vol_frac)**(1./3.) # cell radius
     c_Hres = c_ref * 10**(-pH) # [M] # H^+ reservoir concentration 
@@ -68,11 +69,14 @@ def variables(a, lb, vol_frac, c_salt, Zmax_a, Zmax_b, pKa, pKb, pH, c_ref=1):
 @dataclass
 class LinearVolumeMicrogelWeak():
     """
-    Linear solution of the PB equation accountin for charge regulation just with 
-    acid groups for spherical microgels
+    Linear solution of the PB equation accounting for charge regulation with
+    both acid and basic groups for spherical microgels. This corresponds to
+    the called Debye-Hückel approximation, which is valid for low concentrations
+    of microgels and low electrostatic potentials.
+
     Inputs:
-    r : 
-        radial disance in [nm]
+    r :
+        radial distance in [nm]
     a : 
         microgel radius in [nm]
     lb :
@@ -116,6 +120,7 @@ class LinearVolumeMicrogelWeak():
         
     def lin_elec_pot(self, r):
         """
+        Linear electrostatic potential.
         """
         def inner(x):
             return self.AA * np.sinh(self.zeta * x) / x - self.c
@@ -127,6 +132,7 @@ class LinearVolumeMicrogelWeak():
 
     def lin_elec_field(self, r):
         """
+        Linear electric field.
         """
         def inner(x):
             term1 = x * self.zeta * np.cosh(self.zeta * x)
