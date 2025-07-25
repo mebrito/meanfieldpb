@@ -24,6 +24,7 @@ import math
 from PBequations import PBequation_volumeMicrogel_strong as PBstrong
 from PBequations import PBequation_volumeMicrogel_weak as PBweak
 from util import reservoir_concent
+from LinearPB.linear_volume_microgel_weak import LinearVolumeMicrogelWeak
 
 class VolumeMicrogel(Suspension,WeakParticle):
     """
@@ -91,6 +92,8 @@ class VolumeMicrogel(Suspension,WeakParticle):
     def __init__(self, a, Z_a, Z_b, lb, vol_frac, c_salt, charge_type, pK_a=4, pK_b=4, pH_res=7):
         Suspension.__init__(self, a, Z_b-Z_a, lb, c_salt, charge_type)
 
+        self._vol_frac = vol_frac
+        
         if self.charge_type=='strong':
             self._c_tilde = c_salt * self.conversion_factor # in number of particles per nm^3
             self._k0_aa = None
@@ -100,8 +103,8 @@ class VolumeMicrogel(Suspension,WeakParticle):
             self._c_tilde = reservoir_concent(self.c_Hres, self.c_salt, self.c_ref) * self.conversion_factor
             self._k0_aa = math.sqrt(3 * self.lb * self.Z_a / self.a)
             self._k0_ab = math.sqrt(3 * self.lb * self.Z_b / self.a)
+            self.linear_solution = LinearVolumeMicrogelWeak(self.a, self.lb, self.vol_frac, c_salt, self.Z_a, self.Z_b, pK_a, pK_b, pH_res)
 
-        self._vol_frac = vol_frac
         self._R_cell = a / vol_frac**(1./3)
         self._kresa = self._screening_(self.c_tilde)
 
@@ -216,7 +219,7 @@ class VolumeMicrogel(Suspension,WeakParticle):
         self.r = r * self.a
 
     def lin_elec_pot(self, r):
-        return super().lin_elec_pot(r)
+        return self.linear_solution.lin_elec_pot(r)
 
     def lin_elec_field(self, r):
-        return super().lin_elec_field(r)
+        return self.linear_solution.lin_elec_field(r)

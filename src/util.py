@@ -24,6 +24,9 @@ and polyelectrolyte systems, including reservoir concentration calculations
 for charge-regulated systems and other physical property computations.
 """
 
+import math
+
+
 def reservoir_concent(c_Hres: float, c_salt: float, c_ref: float = 1.0) -> float:
     """
     Calculate the reservoir salt concentration for charge-regulated systems.
@@ -94,7 +97,7 @@ def reservoir_concent(c_Hres: float, c_salt: float, c_ref: float = 1.0) -> float
     >>> print(f"Total concentration: {c_total:.6f} M")
     Total concentration: 0.010999 M
     """
-    K_w = 10^(-14) # reaction constant autdissociation water
+    K_w = 10**(-14) # reaction constant autdissociation water
     c_OHres = c_ref**2 * K_w / c_Hres #[M]
     if c_Hres >= c_OHres:
         c_Nares = c_salt
@@ -102,3 +105,15 @@ def reservoir_concent(c_Hres: float, c_salt: float, c_ref: float = 1.0) -> float
         c_Nares = c_salt + (c_OHres - c_Hres)
     
     return c_Hres + c_Nares
+
+def KaCref(pK, c_ref):
+    """
+    return in units of c_ref, which is typically 1M
+    """
+    return 10.0**(-pK) * c_ref
+
+def csch(x):
+    return 1./(math.sinh(x))
+
+def coth(x):
+    return 1./(math.tanh(x))
