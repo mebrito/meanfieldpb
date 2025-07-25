@@ -387,3 +387,9 @@ class LinearPolyelectrolyte(Suspension):
 
         return (-self.Z + self._N_condensed(r, self.cation_density())
                 - self._N_condensed(r, self.anion_density())) / self.Z
+    
+    def lin_elec_pot(self, r):
+        return super().lin_elec_pot(r)
+
+    def lin_elec_field(self, r):
+        return super().lin_elec_field(r)

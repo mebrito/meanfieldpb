@@ -225,3 +225,8 @@ class Colloid(Suspension):
         self.elec_field = sol[1]
         self.r = r * self.a
 
+    def lin_elec_pot(self, r):
+        return super().lin_elec_pot(r)
+
+    def lin_elec_field(self, r):
+        return super().lin_elec_field(r)

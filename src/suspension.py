@@ -19,8 +19,9 @@
 import numpy as np
 from scipy.integrate import simpson
 import math
+from abc import ABC, abstractmethod
 
-class Suspension:
+class Suspension(ABC):
     """
     Base class for modeling electrostatic interactions in colloidal suspensions.
     
@@ -313,3 +314,46 @@ class Suspension:
 
         return N_system
     
+    @abstractmethod
+    def lin_elec_pot(self, r):
+        """
+        Abstract method to compute the linearized electric potential.
+        
+        Parameters:
+        -----------
+        r : np.array
+            Radial grid for the solution of the Poisson-Boltzmann equation.
+        
+        Returns:
+        --------
+        np.array
+            Linearized electric potential.
+        
+        Description:
+        ------------
+        This method must be implemented in subclasses to compute the linearized electric potential
+        based on the radial grid `r`.
+        """
+        pass
+
+    @abstractmethod
+    def lin_elec_field(self, r):
+        """
+        Abstract method to compute the linearized electric field.
+
+        Parameters:
+        -----------
+        r : np.array
+            Radial grid for the solution of the Poisson-Boltzmann equation.
+
+        Returns:
+        --------
+        np.array
+            Linearized electric field.
+
+        Description:
+        ------------
+        This method must be implemented in subclasses to compute the linearized electric field
+        based on the radial grid `r`.
+        """
+        pass
