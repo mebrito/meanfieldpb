@@ -63,15 +63,20 @@ vol_frac = 0.005 * alpha**3
 c_salt = 1e-4 # [M]
 charge_type = 'strong'
 
+# Create suspension instance
 my_suspension = volume_microgel.VolumeMicrogel(a, Z_a, Z_b, lb, vol_frac, c_salt, charge_type)
 r = np.linspace(1e-8, my_suspension.R_cell, N_nodes)
 y_init = np.zeros((2, r.size))
+# Solve the non-linear Poisson-Boltzmann equation
 my_suspension.solve_nonlin_PB(r, y_init)
 
 # Plotting electrostatic potential and field
 plt.plot(my_suspension.r/a0, my_suspension.elec_pot, label=r'electrostatic potential $\phi(r)$', lw=2, color=colors[0])
 plt.plot(my_suspension.r/a0, my_suspension.elec_field, label=r"electric field $\phi'(r)$", lw=2, color=colors[1])
+
+# Setting reference microgel radius line
 plt.axvline(x=alpha, color='gray', linestyle='--', label=r'microgel radius $a/a_0$', lw=1, alpha=0.5)
+# Setting labels, legends and show
 plt.xlabel('$r/a_0$', fontsize=font_size)
 plt.ylabel(r"$\phi(r)$, $\phi'(r)$", fontsize=font_size)
 plt.legend()
@@ -79,10 +84,14 @@ plt.show()
 
 # Plotting ion density profile
 n_diff = (my_suspension.cation_density() - my_suspension.anion_density()) * my_suspension.conversion_factor # Convert to [nm^-3]
+plt.plot(my_suspension.r/a0, n_diff*a0**3, label=r'MeanFieldPB', lw=2, color=colors[0])
+# Plotting ion density profile from reference
 ref_data = np.genfromtxt(os.path.join(os.path.dirname(__file__), './ref_data/microgel.dat'), skip_header=7)
-plt.plot(my_suspension.r/a0, n_diff*a0**3, label=r'meanFieldPB', lw=2, color=colors[0])
 plt.plot(ref_data[:, 0], ref_data[:, 1], label=r'reference data', marker='o', markersize=4, lw=0, fillstyle='none', color=colors[1])
+
+# Setting reference microgel radius line
 plt.axvline(x=alpha, color='gray', linestyle='--', label=r'microgel radius $a/a_0$', lw=1, alpha=0.5)
+# Setting labels, legends and show
 plt.xlabel('$r/a_0$', fontsize=font_size)
 plt.ylabel(r"$[n_+(r) - n_-(r)]a_0^3$", fontsize=font_size)
 plt.legend()

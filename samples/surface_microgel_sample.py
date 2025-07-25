@@ -96,19 +96,19 @@ for i, vol_frac_0 in enumerate(vol_fracs_0):
     if vol_frac_0 == 0.03:
         ref_data_pb = np.genfromtxt(os.path.join(os.path.dirname(__file__), f'./ref_data/surf-microgel_PB_{str(vol_frac_0)}.dat'), skip_header=7)
         ax3.plot(ref_data_pb[:, 0], ref_data_pb[:, 1],
-                 marker='', markersize=5, lw=2, linestyle='--', color='lightgray')
+                 marker='', markersize=5, lw=2, linestyle=(0, (5, 5)), color='lightgray')
 
-# Setting labels and legends
-ax3.set_xlabel('$r/a$', fontsize=font_size)
-ax1.set_ylabel(r"Electrostatic potential $\phi(r)$", fontsize=font_size)
-ax2.set_ylabel(r"Electric field $\phi'(r)$", fontsize=font_size)
-ax3.set_ylabel(r"Counterion density $n_+(r) a^3$", fontsize=font_size)
 
 # Setting reference microgel radius line
 ax1.axvline(x=1, color='gray', linestyle='--', label=r'microgel radius', lw=1, alpha=0.5)
 ax2.axvline(x=1, color='gray', linestyle='--', lw=1, alpha=0.5)
 ax3.axvline(x=1, color='gray', linestyle='--', lw=1, alpha=0.5)
 
+# Setting labels and legends
+ax3.set_xlabel('$r/a$', fontsize=font_size)
+ax1.set_ylabel(r"Electrostatic potential $\phi(r)$", fontsize=font_size)
+ax2.set_ylabel(r"Electric field $\phi'(r)$", fontsize=font_size)
+ax3.set_ylabel(r"Counterion density $n_+(r) a^3$", fontsize=font_size)
 ax1.legend(title='dry volume fraction', fontsize=font_size-2)
 ax2.legend(title='dry volume fraction', fontsize=font_size-2)
 ax3.legend(title='dry volume fraction', fontsize=font_size-2)
