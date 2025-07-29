@@ -34,10 +34,8 @@ build:
 test:
   stage: test
   script:
-    - python3 -m unittest tests/volume_microgel_test.py
-    - python3 -m unittest tests/surface_microgel_test.py
-    - python3 -m unittest tests/linear_polyelec_test.py
-    - python3 -m unittest tests/colloid_test.py
+    - echo "Running tests..."
+    - python3 -m unittest discover -s tests -p "*_test.py"
   tags:
     - docker
   # artifacts:
