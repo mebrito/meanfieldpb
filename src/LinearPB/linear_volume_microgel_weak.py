@@ -119,6 +119,8 @@ class LinearVolumeMicrogelWeak():
         self.CC = -((self.c*math.exp((self.a + 2*R)*k_res)*(-1 + R*k_res)*(self.a*self.zeta*math.cosh(self.a*self.zeta) - math.sinh(self.a*self.zeta)))/(math.exp(2*self.a*k_res)*(1 + R*k_res)*(self.zeta*math.cosh(self.a*self.zeta) - k_res*math.sinh(self.a*self.zeta)) + math.exp(2*R*k_res)*(-1 + R*k_res)*
             (self.zeta*math.cosh(self.a*self.zeta) + k_res*math.sinh(self.a*self.zeta))))
         
+        self.k_res = k_res
+        
     def lin_elec_pot(self, r):
         """
         Linear electrostatic potential.
