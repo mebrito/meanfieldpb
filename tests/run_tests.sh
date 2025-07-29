@@ -23,3 +23,4 @@ python3 -m unittest volume_microgel_test.py
 python3 -m unittest surface_microgel_test.py
 python3 -m unittest linear_polyelec_test.py
 python3 -m unittest colloid_test.py
+python3 -m unittest linear_volume_microgel_test.py
