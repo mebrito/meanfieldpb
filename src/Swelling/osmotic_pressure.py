@@ -23,6 +23,7 @@ from src.surface_microgel import SurfaceMicrogel
 from src.suspension import Suspension
 from src.volume_microgel import VolumeMicrogel
 from polymer_network import PolymerNetwork, CrosslinkedPolymerNetwork, UncrosslinkedPolymerNetwork, FEPolymerNetwork
+import pressures
 
 # Strategies for calculating osmotic pressure contributions -------------------
 def volume_self_contribution(microgel_suspension: VolumeMicrogel):
@@ -35,16 +36,16 @@ def surface_self_contribution(microgel_suspension: SurfaceMicrogel):
 
 # Strategy for calculating polymer pressure contributions ---------------------
 def crosslinked_polymer_contribution(network: CrosslinkedPolymerNetwork):
-    # Implement the calculation logic for crosslinked polymer networks
-    pass
+    return pressures.pi_g_crosslinked(network.a, network.a0, network.N_m,
+                                      network.Nch, network.Nmonch, network.chi_parameter)
 
 def uncrosslinked_polymer_contribution(network: UncrosslinkedPolymerNetwork):
-    # Implement the calculation logic for uncrosslinked polymer networks
-    pass
+    return pressures.pi_g(network.a, network.Nmonch, network.Nch,
+                          network.a0, network.N_m, network.chi_parameter)
 
 def fe_polymer_contribution(network: FEPolymerNetwork):
-    # Implement the calculation logic for finite extensibility polymer networks
-    pass
+    return pressures.pi_g_Langevin(network.a, network.Nmonch, network.Nch,
+                                   network.a0, network.N_m, network.chi_parameter)
 
 # Osmotic Pressure Calculator -------------------------------------------------
 @dataclass

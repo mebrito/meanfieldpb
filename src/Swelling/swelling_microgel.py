@@ -28,11 +28,11 @@ from polymer_network import PolymerNetwork
 # Factories and factory abstraction for Suspension ----------------------------
 class SuspensionFactory(ABC):
     """
+    Factory abstraction for creating microgel suspensions.
     """
     @abstractmethod
     def get_microgel_suspension(self, microgel_type: str, **kwargs) -> Suspension:
-        """
-        """
+        pass
 
 class VolumeMicrogelFactory(SuspensionFactory):
     """
@@ -52,11 +52,10 @@ class SurfaceMicrogelFactory(SuspensionFactory):
 # Factories and factory abstraction for PolymerNetwork ------------------------
 class NetworkFactory(ABC):
     """
+    Factory abstraction for creating polymer networks.
     """
     @abstractmethod
     def get_polymer_network(self, **kwargs) -> PolymerNetwork:
-        """
-        """
         pass
 
 class CrosslinkedNetworkFactory(NetworkFactory):

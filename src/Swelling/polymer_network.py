@@ -24,10 +24,13 @@ class PolymerNetwork(ABC):
     """
     Abstract base class for polymer networks.
     """
+    a: float = 0.0  # Radius of the polymer network
+    a0: float = 0.0  # Dry radius of the polymer network
     N_monomers: int = 0  # Number of monomers in the polymer chain
     N_chains: int = 0  # Number of chains in the polymer network
     N_crosslinks: int = 0  # Number of crosslinks in the polymer network
     chi_parameter: float = 0.0  # Interaction parameter
+    # CHECK DEFINITIONS FOR N_m, Nch, Nmonch
     
 class CrosslinkedPolymerNetwork(PolymerNetwork):
     """
