@@ -22,7 +22,10 @@ from abc import ABC, abstractmethod
 from src.surface_microgel import SurfaceMicrogel
 from src.suspension import Suspension
 from src.volume_microgel import VolumeMicrogel
+from osmotic_pressure import OsmoticPressureCalculator
+from polymer_network import PolymerNetwork
 
+# Factories and factory abstraction for Suspension ----------------------------
 class SuspensionFactory(ABC):
     """
     """
@@ -46,13 +49,46 @@ class SurfaceMicrogelFactory(SuspensionFactory):
         return SurfaceMicrogel(**kwargs)
     
 
+# Factories and factory abstraction for PolymerNetwork ------------------------
+class NetworkFactory(ABC):
+    """
+    """
+    @abstractmethod
+    def get_polymer_network(self, **kwargs) -> PolymerNetwork:
+        """
+        """
+        pass
 
+class CrosslinkedNetworkFactory(NetworkFactory):
+    """
+    """
+    def get_polymer_network(self,  **kwargs):
+        from polymer_network import CrosslinkedPolymerNetwork
+        return CrosslinkedPolymerNetwork(**kwargs)
+    
+class UncrosslinkedNetworkFactory(NetworkFactory):
+    """
+    """
+    def get_polymer_network(self, **kwargs):
+        from polymer_network import UncrosslinkedPolymerNetwork
+        return UncrosslinkedPolymerNetwork(**kwargs)
+    
+class FiniteExtensibilityNetworkFactory(NetworkFactory):
+    """
+    """
+    def get_polymer_network(self, **kwargs):
+        from polymer_network import FEPolymerNetwork
+        return FEPolymerNetwork(**kwargs)
+    
+
+# Swelling Microgel Suspension ------------------------------------------------
 @dataclass
 class SwellingMicrogelSuspension():
     """
     """
 
     microgel_type: str # Type of microgel (e.g., "volume_microgel", "surface_microgel")
+    network_type: str # Type of polymer network (e.g., "crosslinked", "uncrosslinked", "finite_extensibility"
     Z_a: float
     Z_b: float
     lb: float
@@ -76,6 +112,17 @@ class SwellingMicrogelSuspension():
         }
 
         return factories.get(self.microgel_type, None)
+
+    def read_network(self) -> NetworkFactory:
+        """
+        """
+        factories = {
+            "crosslinked": CrosslinkedNetworkFactory(),
+            "uncrosslinked": UncrosslinkedNetworkFactory(),
+            "finite_extensibility": FiniteExtensibilityNetworkFactory()
+        }
+
+        return factories.get(self.network_type, None)
     
     def set_a_values(self, a_values: list[float]) -> None:
         """
@@ -98,6 +145,9 @@ class SwellingMicrogelSuspension():
         susp = self.read_suspension()
         if susp is None:
             raise ValueError(f"Unknown microgel type: {self.microgel_type}")
+        net = self.read_network()
+        if net is None:
+            raise ValueError(f"Unknown network type: {self.network_type}")
 
         for a_trial in self.a_values:
             microgel_suspension = susp.get_microgel_suspension(
@@ -112,5 +162,14 @@ class SwellingMicrogelSuspension():
                 pK_b=self.pK_b,
                 pH_res=self.pH_res
             )
+            polymer_network = net.get_polymer_network(
+                N_monomers=self.N_monomers,
+                N_crosslinks=self.N_crosslinks,
+                N_chains=self.N_chains,
+                chi_parameter=self.chi_parameter
+            )
+
+            op_calculator = OsmoticPressureCalculator(microgel_suspension, polymer_network)
+            op_calculator.total_osmotic_pressure()
 
             # Here you would typically solve the PB equation or perform other calculations
