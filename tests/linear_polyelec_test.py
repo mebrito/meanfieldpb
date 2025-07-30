@@ -140,11 +140,6 @@ class TestLinearPolyelectrolyte(ut.TestCase):
         residual = np.max(np.abs(P_ref[:-1] - P_calc))
         self.assertAlmostEqual(residual, 0, places=1, msg=None, delta=None)
         
-        # import matplotlib.pyplot as plt
-        # plt.semilogx(r_ref, P_ref, 'o', label='$q_\mathrm{ref}(r)$')
-        # plt.semilogx(r/my_suspension.a, P_calc, '-', label='$q(r)$')
-        # plt.legend()
-        # plt.show()
 
 
 if __name__ == '__main__':
