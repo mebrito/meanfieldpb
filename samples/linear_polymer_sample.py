@@ -18,9 +18,25 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 """
-Reference data
-Deserno et al., Macromolecules 2000, 33, 1, 199–206
+This script computes and visualizes the electrostatic potential, electric field, and probability density
+profiles for a infinite polyelectrolyte in a suspension using a mean-field Poisson-Boltzmann cell-model
+approach.
+
+The computed probability density profile is compared to reference data from:
+Deserno et al., Macromolecules 2000, 33, 1, 199-206
 https://doi.org/10.1021/ma990897o
+
+Parameters:
+- N_nodes: Number of spatial grid points for numerical solution.
+- a: Polyelectrolyte radius [nm].
+- xi_ref: reference linear charge density [1/nm].
+- lb: Bjerrum length [nm].
+- R_red: Reduced cell radius (over the polyelectrolyte radius).
+- c_salt: Salt concentration [M].
+
+Outputs:
+- Plots of electrostatic potential and field.
+- Plots of probability density compared to reference data.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -46,13 +62,9 @@ c_salt = 1e-6 # [M]
 # Create suspension instance
 my_suspension = linear_polyelec.LinearPolyelectrolyte(a, Z, lb, vol_frac, c_salt)
 
-# Iteration 1
+# Solve the non-linear Poisson-Boltzmann equation
 r = np.linspace(a, my_suspension.R_cell, N_nodes)
 y_init = np.zeros((2, r.size))
-my_suspension.solve_nonlin_PB(r, y_init)
-# Iteration 2
-y_init = np.zeros((2, r.size))
-y_init[0] = my_suspension.elec_pot  # Initial guess for phi
 my_suspension.solve_nonlin_PB(r, y_init)
 
 # Plotting electrostatic potential and field
@@ -63,12 +75,12 @@ plt.ylabel(r"$\phi(r)$, $\phi'(r)$", fontsize=font_size)
 plt.legend()
 plt.show()
 
-# Compare cummulative density
-# Plotting ion density profile from reference
+# Compare cummulative probability density
+# Plotting probability density profile from reference
 ref_data = np.genfromtxt(os.path.join(os.path.dirname(__file__), './ref_data/lin_polyelec.dat'), skip_header=7)
 plt.semilogx(ref_data[:, 0], ref_data[:, 1], label=r'reference data', marker='o', markersize=4, lw=0, fillstyle='none', color=colors[1])
 
-# Calculating and plotting cummulative density
+# Calculating and plotting cummulative probability density
 # P(r) = 1 - |Q(r)|, where Q(r) is the total charge up to radius r
 r = ref_data[:-1, 0] * my_suspension.a
 total_q = np.array([my_suspension.total_charge(r_val) for r_val in r])
