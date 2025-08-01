@@ -47,9 +47,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-username/MeanFieldPB"
-Repository = "https://github.com/your-username/MeanFieldPB"
-Issues = "https://github.com/your-username/MeanFieldPB/issues"
+Homepage = "https://github.com/mebrito/meanfieldpb"
+Repository = "https://github.com/mebrito/meanfieldpb"
+Issues = "https://github.com/mebrito/meanfieldpb/issues"
 Documentation = "https://meanfieldpb.readthedocs.io"
 
 [project.optional-dependencies]

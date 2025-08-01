@@ -58,10 +58,10 @@ setup(
     },
     
     # Package metadata
-    url="https://github.com/your-username/meanfieldpb",  # Update with actual repository URL
+    url="https://github.com/mebrito/meanfieldpb",  # Update with actual repository URL
     project_urls={
-        "Bug Reports": "https://github.com/your-username/meanfieldpb/issues",
-        "Source": "https://github.com/your-username/meanfieldpb",
+        "Bug Reports": "https://github.com/mebrito/meanfieldpb/issues",
+        "Source": "https://github.com/mebrito/meanfieldpb",
     },
     
     # Classifiers

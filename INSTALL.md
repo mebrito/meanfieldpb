@@ -13,8 +13,8 @@ Follow these steps to install and set up the MeanFieldPB package:
 1. **Clone the repository** (if you haven't already):
 
     ```bash
-    git clone https://github.com/your-username/MeanFieldPB.git
-    cd MeanFieldPB
+    git clone https://github.com/mebrito/meanfieldpb.git
+    cd meanfieldpb
     ```
 
 2. **Create and activate a virtual environment**:
@@ -38,6 +38,8 @@ Follow these steps to install and set up the MeanFieldPB package:
 
 5. **Complete installation script**:
     ```bash
+    git clone https://github.com/mebrito/meanfieldpb.git
+    cd meanfieldpb
     python3 -m venv env
     source env/bin/activate
     python3 -m pip install -r requirements.txt
@@ -115,7 +117,7 @@ If you plan to contribute to the project:
 4. Install in development mode with all dependencies:
 
 ```bash
-git clone https://github.com/your-username/MeanFieldPB.git
+git clone https://github.com/mebrito/meanfieldpb.git
 cd meanfieldpb
 python3 -m venv env
 source env/bin/activate

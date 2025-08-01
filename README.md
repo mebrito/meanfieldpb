@@ -40,15 +40,15 @@ Within the Poisson-Boltzmann cell model (PBCM), the suspension of interest is mo
 ### Install from PyPI (when available)
 
 ```bash
-pip install MeanFieldPB
+pip install meanfieldpb
 ```
 
 ### Install from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/MeanFieldPB.git
-cd MeanFieldPB
+git clone https://github.com/mebrito/meanfieldpb.git
+cd meanfieldpb
 
 # Install in development mode
 pip install -e .
@@ -233,8 +233,8 @@ cd tests/
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/MeanFieldPB.git
-cd MeanFieldPB
+git clone https://github.com/mebrito/meanfieldpb.git
+cd meanfieldpb
 
 # Install in development mode with dev dependencies
 pip install -e .[dev]
@@ -287,8 +287,8 @@ Contributions are welcome! Please feel free to submit issues and enhancement req
 
 ## Links
 
-- **Repository**: https://github.com/your-username/MeanFieldPB
-- **Issues**: https://github.com/your-username/MeanFieldPB/issues
+- **Repository**: https://github.com/mebrito/meanfieldpb
+- **Issues**: https://github.com/mebrito/meanfieldpb/issues
 - **Documentation**: https://meanfieldpb.readthedocs.io
 
 ## Author
