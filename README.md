@@ -33,20 +33,38 @@ Within the Poisson-Boltzmann cell model (PBCM), the suspension of interest is mo
 ### Prerequisites
 
 - Python 3.7+
-- NumPy
-- SciPy 
-- Matplotlib
+- NumPy (≥1.20.0)
+- SciPy (≥1.7.0)
+- Matplotlib (≥3.5.0)
 
-### Install Dependencies
+### Install from PyPI (when available)
 
 ```bash
-pip install -r requirements.txt
+pip install MeanFieldPB
 ```
 
-### Install Package
+### Install from Source
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/MeanFieldPB.git
+cd MeanFieldPB
+
+# Install in development mode
 pip install -e .
+```
+
+### Install with Optional Dependencies
+
+```bash
+# Install with development tools
+pip install -e .[dev]
+
+# Install with documentation tools  
+pip install -e .[docs]
+
+# Install with testing tools
+pip install -e .[test]
 ```
 
 ## Quick Start
@@ -55,45 +73,86 @@ pip install -e .
 
 ```python
 import numpy as np
-from src import Colloid
+from meanfieldpb import Colloid
 
 # Define system parameters
-a = 50          # particle radius [nm]
-Z = 100         # particle charge [e]
-lb = 0.71       # Bjerrum length [nm]
-vol_frac = 0.001 # volume fraction
-c_salt = 0.0001  # salt concentration [M]
+a = 50              # particle radius [nm]
+Z = 100             # particle charge [e]
+lb = 0.71           # Bjerrum length [nm] (water at room temperature)
+vol_frac = 0.001    # volume fraction
+c_salt = 0.0001     # salt concentration [M]
 charge_type = 'strong'
 
 # Create colloid suspension
 colloid_system = Colloid(a, Z, lb, vol_frac, c_salt, charge_type)
 
+# Set up spatial grid from particle surface to cell boundary
+r = np.linspace(a, colloid_system.R_cell, 1000)
+
 # Calculate electrostatic potential
-r = np.linspace(1e-5, colloid_system.R_cell, 1000)
-potential = colloid_system.elec_pot(r)
+y_init = np.zeros((2, r.size))
+colloid_system.solve_nonlin_PB(r, y_init)
+potential = colloid_system.elec_pot
 ```
 
 ### Volume Microgel Suspension
 
 ```python
-from src import VolumeMicrogel
+import matplotlib.pyplot as plt
+import numpy as np
+from meanfieldpb import VolumeMicrogel
 
 # Microgel parameters
-a0 = 108        # reference radius [nm]
-alpha = 1.84    # swelling factor
-Z_a = 1392      # backbone charge
-Z_b = 0         # additional charge
-lb = 0.71       # Bjerrum length [nm]
-vol_frac = 0.02 # volume fraction
-c_salt = 0.001  # salt concentration [M]
+N_nodes = 5000      # number of grid points
+a0 = 10             # reference radius [nm]
+alpha = 2.612       # swelling factor
+a = alpha * a0      # swollen radius [nm]
+Z_a = 500           # backbone charge
+Z_b = 0             # additional charge
+lb = 0.71           # Bjerrum length [nm] (water at room temperature)
+vol_frac = 0.005 * alpha**3  # volume fraction
+c_salt = 1e-4       # salt concentration [M]
+charge_type = 'strong'
 
 # Create microgel suspension
-microgel_system = VolumeMicrogel(a0, alpha, Z_a, Z_b, lb, vol_frac, c_salt, 'strong')
+microgel_system = VolumeMicrogel(a, Z_a, Z_b, lb, vol_frac, c_salt, charge_type)
 
-# Calculate ion density profiles
-r = np.linspace(1e-5, microgel_system.R_cell, 1000)
-n_plus = microgel_system.n_plus(r)
-n_minus = microgel_system.n_minus(r)
+# Set up spatial grid
+r = np.linspace(1e-8, microgel_system.R_cell, N_nodes)
+y_init = np.zeros((2, r.size))
+
+# Solve the nonlinear Poisson-Boltzmann equation
+microgel_system.solve_nonlin_PB(r, y_init)
+
+# Calculate electrostatic properties
+potential = microgel_system.elec_pot
+electric_field = microgel_system.elec_field
+cation_density = microgel_system.cation_density()
+anion_density = microgel_system.anion_density()
+
+# Plot electrostatic potential and field
+plt.figure(figsize=(10, 6))
+plt.subplot(1, 2, 1)
+plt.plot(microgel_system.r/a0, potential, label='Electrostatic potential φ(r)', lw=2)
+plt.plot(microgel_system.r/a0, electric_field, label="Electric field φ'(r)", lw=2)
+plt.axvline(x=alpha, color='gray', linestyle='--', label='Microgel radius a/a₀', alpha=0.5)
+plt.xlabel('r/a₀')
+plt.ylabel('φ(r), φ\'(r)')
+plt.legend()
+plt.title('Electrostatic Properties')
+
+# Plot ion density difference
+plt.subplot(1, 2, 2)
+n_diff = (cation_density - anion_density) * microgel_system.conversion_factor
+plt.plot(microgel_system.r/a0, n_diff*a0**3, label='Ion density difference', lw=2)
+plt.axvline(x=alpha, color='gray', linestyle='--', label='Microgel radius a/a₀', alpha=0.5)
+plt.xlabel('r/a₀')
+plt.ylabel('[n₊(r) - n₋(r)]a₀³')
+plt.legend()
+plt.title('Ion Density Profile')
+
+plt.tight_layout()
+plt.show()
 ```
 
 ## Available Particle Types
@@ -138,14 +197,27 @@ The `samples/` directory contains example scripts demonstrating:
 
 ## Testing
 
-Run the test suite:
+Run the test suite using pytest:
 
 ```bash
 # Run all tests
-python -m pytest tests/
+pytest
+
+# Run tests with coverage
+pytest --cov=meanfieldpb
+
+# Run specific test file
+pytest tests/volume_microgel_test.py
+```
+
+Or use the traditional unittest approach:
+
+```bash
+# Run all tests
+python -m unittest discover -s tests -p "*.py"
 
 # Run specific test
-python tests/volume_microgel_test.py
+python -m unittest tests.volume_microgel_test
 ```
 
 Or use the provided test runner:
@@ -155,22 +227,69 @@ cd tests/
 ./run_tests.sh
 ```
 
+## Development
+
+### Setting up Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/MeanFieldPB.git
+cd MeanFieldPB
+
+# Install in development mode with dev dependencies
+pip install -e .[dev]
+
+# Run tests
+pytest
+
+# Run linting
+flake8 meanfieldpb/
+black meanfieldpb/
+
+# Run type checking
+mypy meanfieldpb/
+```
+
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 or later - see the [LICENSE](LICENSE) file for details.
 
 ## Citation
 
 If you use MeanFieldPB in your research, please cite:
 
-```
-Brito et al., J. Chem. Phys. 151, 224901 (2019)
-https://doi.org/10.1063/1.5129575
+```bibtex
+@article{brito2019meanfield,
+  title={Mean-field theory for charged microgels at interfaces},
+  author={Brito, Mariano E. and others},
+  journal={Journal of Chemical Physics},
+  volume={151},
+  pages={224901},
+  year={2019},
+  doi={10.1063/1.5129575}
+}
 ```
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues and enhancement requests.
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests for your changes
+5. Run the test suite (`pytest`)
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+## Links
+
+- **Repository**: https://github.com/your-username/MeanFieldPB
+- **Issues**: https://github.com/your-username/MeanFieldPB/issues
+- **Documentation**: https://meanfieldpb.readthedocs.io
 
 ## Author
 
