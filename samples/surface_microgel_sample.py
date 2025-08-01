@@ -46,7 +46,7 @@ import numpy as np
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
 import surface_microgel
 
 colors = ['tab:blue', 'tab:red', 'black']

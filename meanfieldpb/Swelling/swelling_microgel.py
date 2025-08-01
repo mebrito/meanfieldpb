@@ -19,9 +19,9 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-from src.surface_microgel import SurfaceMicrogel
-from src.suspension import Suspension
-from src.volume_microgel import VolumeMicrogel
+from meanfieldpb.surface_microgel import SurfaceMicrogel
+from meanfieldpb.suspension import Suspension
+from meanfieldpb.volume_microgel import VolumeMicrogel
 from osmotic_pressure import OsmoticPressureCalculator
 from polymer_network import PolymerNetwork
 

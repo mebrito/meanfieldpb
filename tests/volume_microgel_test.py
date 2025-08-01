@@ -21,7 +21,7 @@ import numpy as np
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
 from PBequations import PBequation_volumeMicrogel_strong as PBstrong
 from PBequations import PBequation_volumeMicrogel_weak as PBweak
 import volume_microgel
