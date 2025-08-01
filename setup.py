@@ -13,7 +13,7 @@ def read_readme():
     return ""
 
 setup(
-    name="MeanFieldPB",
+    name="meanfieldpb",
     version="0.1.0",
     
     # Author information
