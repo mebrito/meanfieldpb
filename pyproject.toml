@@ -1,6 +1,77 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "MeanFieldPB"
 version = "0.1.0"
-license = {text = "GNU GPLv3"}
+description = "A Python package for modeling electrostatics of colloidal and polymer suspensions using mean-field Poisson-Boltzmann equations"
+readme = "README.md"
+license = {text = "GPL-3.0-or-later"}
 authors = [{name = "Mariano E. Brito", email = "mbrito@icp.uni-stuttgart.de"}]
+maintainers = [{name = "Mariano E. Brito", email = "mbrito@icp.uni-stuttgart.de"}]
+requires-python = ">=3.7"
 
+dependencies = [
+    "numpy>=1.20.0",
+    "scipy>=1.7.0", 
+    "matplotlib>=3.5.0"
+]
+
+keywords = [
+    "poisson-boltzmann",
+    "electrostatics", 
+    "colloids",
+    "microgels",
+    "polyelectrolytes",
+    "mean-field",
+    "physics",
+    "chemistry"
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8", 
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics"
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/MeanFieldPB"
+Repository = "https://github.com/your-username/MeanFieldPB"
+Issues = "https://github.com/your-username/MeanFieldPB/issues"
+Documentation = "https://meanfieldpb.readthedocs.io"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=3.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.900"
+]
+docs = [
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0",
+    "myst-parser>=0.17"
+]
+test = [
+    "pytest>=6.0",
+    "pytest-cov>=3.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["meanfieldpb"]
+
+[tool.setuptools.package-dir]
+"" = "meanfieldpb"
