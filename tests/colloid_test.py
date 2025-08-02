@@ -24,7 +24,7 @@ from meanfieldpb import colloid
 
 # import matplotlib.pyplot as plt
 
-def test_PBeq(r, phi, phi_prime, f_diff_eq, param):
+def _test_PBeq(r, phi, phi_prime, f_diff_eq, param):
     """
     Computes the residuals to test the self-consistency of the numerical solution
     to the Poisson-Boltzmann (PB) equation for colloidal systems.
@@ -89,7 +89,7 @@ class TestColloid(ut.TestCase):
         Tests the self-consistency of the PB solution for a strongly charged colloidal system.
         Asserts that the numerical derivatives match the analytical expressions within a specified tolerance.
 
-    The test uses a helper function `test_PBeq` to compute the residuals between numerical and analytical
+    The test uses a helper function `_test_PBeq` to compute the residuals between numerical and analytical
     derivatives, and asserts that these residuals are close to zero.
     """
 
@@ -111,7 +111,7 @@ class TestColloid(ut.TestCase):
 
         # Self-consistency of first and second derivative
         param = (my_suspension.kresa, my_suspension.Zlba)
-        residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
+        residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
                                            PBstrong.f_diff_eq, param)
 
         # print('residual_0', residual_0)

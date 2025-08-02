@@ -23,7 +23,7 @@ from meanfieldpb.PBequations import PBequation_surfaceMicrogel_strong as PBstron
 from meanfieldpb import surface_microgel
 
 
-def test_PBeq(r, phi, phi_prime, f_diff_eq, param):
+def _test_PBeq(r, phi, phi_prime, f_diff_eq, param):
     """
     Computes the residuals to test the self-consistency of the numerical solution
     to the Poisson-Boltzmann (PB) equation.
@@ -92,7 +92,7 @@ class TestSurfaceMicrogels(ut.TestCase):
         Tests the self-consistency of the PB solution for a strongly charged surface microgel.
         Asserts that the numerical derivatives match the analytical expressions within a specified tolerance.
 
-    The test uses a helper function `test_PBeq` to compute the residuals between numerical and analytical
+    The test uses a helper function `_test_PBeq` to compute the residuals between numerical and analytical
     derivatives, and asserts that these residuals are close to zero.
     """
 
@@ -116,7 +116,7 @@ class TestSurfaceMicrogels(ut.TestCase):
 
         # Self-consistency of first and second derivative
         param = (my_suspension.kresa, my_suspension.Zlba, my_suspension.gamma)
-        residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
+        residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
                                            PBstrong.f_diff_eq, param)
 
         self.assertAlmostEqual(residual_0, 0, places=4, msg=None, delta=None)
@@ -143,7 +143,7 @@ class TestSurfaceMicrogels(ut.TestCase):
     #     # Self-consistency of first and second derivative
     #     param = (my_suspension.kresa, my_suspension.k0_aa, my_suspension.xi_a,
     #              my_suspension.k0_ab, my_suspension.xi_b)
-    #     residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
+    #     residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
     #                                        PBweak.f_diff_eq, param)
 
     #     self.assertAlmostEqual(residual_0, 0, places=4, msg=None, delta=None)

@@ -37,11 +37,11 @@ Within the Poisson-Boltzmann cell model (PBCM), the suspension of interest is mo
 - SciPy (≥1.7.0)
 - Matplotlib (≥3.5.0)
 
-### Install from PyPI (when available)
+<!-- ### Install from PyPI (when available)
 
 ```bash
 pip install meanfieldpb
-```
+``` -->
 
 ### Install from Source
 

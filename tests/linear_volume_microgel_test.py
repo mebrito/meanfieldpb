@@ -25,7 +25,7 @@ import sys
 from meanfieldpb.LinearPB.linear_volume_microgel_weak import variables
 from meanfieldpb import volume_microgel
 
-def test_PBeq(r, a, phi, phi_prime, f_diff_eq):
+def _test_PBeq(r, a, phi, phi_prime, f_diff_eq):
     """
 
     """
@@ -98,7 +98,7 @@ class TestLinearVolumeMicrogels(ut.TestCase):
                                 -2 * y_prime / r + k_res * k_res * y)
 
         # Self-consistency of first and second derivative
-        residual_0, residual_1 = test_PBeq(r, self.a, lin_elec_pot, lin_elec_field, f_diff_eq)
+        residual_0, residual_1 = _test_PBeq(r, self.a, lin_elec_pot, lin_elec_field, f_diff_eq)
 
         self.assertAlmostEqual(residual_0, 0, places=4, msg=None, delta=None)
         self.assertAlmostEqual(residual_1, 0, places=4, msg=None, delta=None)

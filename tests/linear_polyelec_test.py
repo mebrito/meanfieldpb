@@ -24,7 +24,7 @@ from meanfieldpb.PBequations import PBequation_linearPolyelectrolyte_strong as P
 from meanfieldpb import linear_polyelec
 
 
-def test_PBeq(r, phi, phi_prime, param):
+def _test_PBeq(r, phi, phi_prime, param):
     residual_0 = np.max(np.abs(np.gradient(phi, r) - phi_prime))
     phi_double_prime = np.gradient(phi_prime, r)
     residual_1 = phi_double_prime - PBlinPoly.f_diff_eq(r, phi, phi_prime, param)
@@ -82,7 +82,7 @@ class TestLinearPolyelectrolyte(ut.TestCase):
         my_suspension.solve_nonlin_PB(r, y_init)
 
         # Self-consistency of first and second derivative
-        residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot,
+        residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot,
                                            my_suspension.elec_field, my_suspension.kappaa)
         
         self.assertAlmostEqual(residual_0, 0, places=2, msg=None, delta=None)
@@ -121,7 +121,7 @@ class TestLinearPolyelectrolyte(ut.TestCase):
         y_init[0] = my_suspension.elec_pot  # Initial guess for phi
         my_suspension.solve_nonlin_PB(r, y_init)
 
-        residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot,
+        residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot,
                                            my_suspension.elec_field, my_suspension.kappaa)
         self.assertAlmostEqual(residual_0, 0, places=2, msg=None, delta=None)
         self.assertAlmostEqual(residual_1, 0, places=1, msg=None, delta=None)

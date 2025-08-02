@@ -24,7 +24,7 @@ from meanfieldpb.PBequations import PBequation_volumeMicrogel_weak as PBweak
 from meanfieldpb import volume_microgel
 
 
-def test_PBeq(r, phi, phi_prime, f_diff_eq, param):
+def _test_PBeq(r, phi, phi_prime, f_diff_eq, param):
     """
     Computes the residuals to test the self-consistency of the numerical solution
     to the Poisson-Boltzmann (PB) equation for volume microgels.
@@ -95,7 +95,7 @@ class TestVolumeMicrogels(ut.TestCase):
         Tests the self-consistency of the PB solution for a weakly charged volume microgel.
         Asserts that the numerical derivatives match the analytical expressions within a specified tolerance.
 
-    The tests use a helper function `test_PBeq` to compute the residuals between numerical and analytical
+    The tests use a helper function `_test_PBeq` to compute the residuals between numerical and analytical
     derivatives, and assert that these residuals are close to zero.
     """
 
@@ -118,7 +118,7 @@ class TestVolumeMicrogels(ut.TestCase):
 
         # Self-consistency of first and second derivative
         param = (my_suspension.kresa, my_suspension.Zlba)
-        residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
+        residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
                                            PBstrong.f_diff_eq, param)
 
         self.assertAlmostEqual(residual_0, 0, places=4, msg=None, delta=None)
@@ -145,7 +145,7 @@ class TestVolumeMicrogels(ut.TestCase):
         # Self-consistency of first and second derivative
         param = (my_suspension.kresa, my_suspension.k0_aa, my_suspension.xi_a,
                  my_suspension.k0_ab, my_suspension.xi_b)
-        residual_0, residual_1 = test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
+        residual_0, residual_1 = _test_PBeq(r/a, my_suspension.elec_pot, my_suspension.elec_field, 
                                            PBweak.f_diff_eq, param)
 
         self.assertAlmostEqual(residual_0, 0, places=4, msg=None, delta=None)
