@@ -70,8 +70,5 @@ test = [
     "pytest-cov>=3.0"
 ]
 
-[tool.setuptools.packages.find]
-where = ["meanfieldpb"]
-
-[tool.setuptools.package-dir]
-"" = "meanfieldpb"
+[tool.setuptools]
+packages = ["meanfieldpb"]

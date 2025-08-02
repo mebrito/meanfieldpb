@@ -22,8 +22,8 @@ from abc import ABC, abstractmethod
 from meanfieldpb.surface_microgel import SurfaceMicrogel
 from meanfieldpb.suspension import Suspension
 from meanfieldpb.volume_microgel import VolumeMicrogel
-from polymer_network import PolymerNetwork, CrosslinkedPolymerNetwork, UncrosslinkedPolymerNetwork, FEPolymerNetwork
-import pressures
+from meanfieldpb.Swelling.polymer_network import PolymerNetwork, CrosslinkedPolymerNetwork, UncrosslinkedPolymerNetwork, FEPolymerNetwork
+from meanfieldpb.Swelling import pressures
 
 # Strategies for calculating osmotic pressure contributions -------------------
 def volume_self_contribution(microgel_suspension: VolumeMicrogel):

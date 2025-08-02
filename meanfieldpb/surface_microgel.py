@@ -23,7 +23,7 @@ import numpy as np
 from scipy.integrate import solve_bvp
 import numpy as np
 import math
-from util import reservoir_concent
+from meanfieldpb.util import reservoir_concent
 from meanfieldpb.PBequations import PBequation_surfaceMicrogel_strong as PBstrong
 
 class SurfaceMicrogel(Suspension, WeakParticle):

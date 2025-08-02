@@ -19,11 +19,10 @@
 
 from dataclasses import dataclass
 import numpy as np
-import math, sys, os
+import math
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from util import reservoir_concent, KaCref, csch, coth
-from suspension import Suspension
+from meanfieldpb.util import reservoir_concent, KaCref, csch, coth
+from meanfieldpb.suspension import Suspension
 
 # REMOVE this function in the future to avoid hidden duplication of code
 def variables(a, lb, vol_frac, c_salt, Zmax_a, Zmax_b, pKa, pKb, pH, c_ref=1):

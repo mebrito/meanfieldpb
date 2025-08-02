@@ -23,7 +23,7 @@ from scipy.integrate import solve_bvp
 import math
 from meanfieldpb.PBequations import PBequation_volumeMicrogel_strong as PBstrong
 from meanfieldpb.PBequations import PBequation_volumeMicrogel_weak as PBweak
-from util import reservoir_concent
+from meanfieldpb.util import reservoir_concent
 from meanfieldpb.LinearPB.linear_volume_microgel_weak import LinearVolumeMicrogelWeak
 
 class VolumeMicrogel(Suspension,WeakParticle):

@@ -36,7 +36,7 @@ setup(
     
     # Dependencies
     install_requires=[
-        "requests>=20.0",
+        "requests>=2.0",
         "numpy>=1.20.0", 
         "scipy>=1.7.0",
         "matplotlib>=3.5.0"

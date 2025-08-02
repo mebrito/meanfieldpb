@@ -22,8 +22,8 @@ from abc import ABC, abstractmethod
 from meanfieldpb.surface_microgel import SurfaceMicrogel
 from meanfieldpb.suspension import Suspension
 from meanfieldpb.volume_microgel import VolumeMicrogel
-from osmotic_pressure import OsmoticPressureCalculator
-from polymer_network import PolymerNetwork
+from meanfieldpb.Swelling.osmotic_pressure import OsmoticPressureCalculator
+from meanfieldpb.Swelling.polymer_network import PolymerNetwork
 
 # Factories and factory abstraction for Suspension ----------------------------
 class SuspensionFactory(ABC):
