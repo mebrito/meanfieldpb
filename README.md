@@ -87,7 +87,7 @@ charge_type = 'strong'
 colloid_system = Colloid(a, Z, lb, vol_frac, c_salt, charge_type)
 
 # Set up spatial grid from particle surface to cell boundary
-r = np.linspace(a, colloid_system.R_cell, 1000)
+r = np.linspace(a, colloid_system.R_cell, 5000)
 
 # Calculate electrostatic potential
 y_init = np.zeros((2, r.size))
