@@ -56,7 +56,7 @@ import meanfieldpb
 print(f"MeanFieldPB version: {meanfieldpb.__version__}")
 
 # Test a simple colloid creation
-from meanfieldpb import Colloid
+from meanfieldpb.colloid import Colloid
 colloid = Colloid(a=50, Z=100, lb=0.71, vol_frac=0.001, c_salt=0.0001, charge_type='strong')
 print(f"Cell radius: {colloid.R_cell:.2f} nm")
 ```
@@ -66,7 +66,10 @@ print(f"Cell radius: {colloid.R_cell:.2f} nm")
 After installation, you can use the package in your Python scripts:
 
 ```python
-from meanfieldpb import Colloid, VolumeMicrogel, SurfaceMicrogel, LinearPolyelectrolyte
+from meanfieldpb.colloid import Colloid
+from meanfieldpb.volume_microgel import VolumeMicrogel
+from meanfieldpb.surface_microgel import SurfaceMicrogel
+from meanfieldpb.linear_polyelec import LinearPolyelectrolyte
 ```
 
 You can also run the example scripts:

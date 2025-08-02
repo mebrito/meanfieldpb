@@ -73,7 +73,7 @@ pip install -e .[test]
 
 ```python
 import numpy as np
-from meanfieldpb import Colloid
+from meanfieldpb.colloid import Colloid
 
 # Define system parameters
 a = 50              # particle radius [nm]
@@ -100,7 +100,7 @@ potential = colloid_system.elec_pot
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
-from meanfieldpb import VolumeMicrogel
+from meanfieldpb.volume_microgel import VolumeMicrogel
 
 # Microgel parameters
 N_nodes = 5000      # number of grid points
@@ -254,7 +254,7 @@ mypy meanfieldpb/
 
 This project is licensed under the GNU General Public License v3.0 or later - see the [LICENSE](LICENSE) file for details.
 
-## Citation
+<!-- ## Citation
 
 If you use MeanFieldPB in your research, please cite:
 
@@ -268,7 +268,7 @@ If you use MeanFieldPB in your research, please cite:
   year={2019},
   doi={10.1063/1.5129575}
 }
-```
+``` -->
 
 ## Contributing
 
@@ -296,6 +296,6 @@ Contributions are welcome! Please feel free to submit issues and enhancement req
 **Mariano E. Brito**  
 Email: mbrito@icp.uni-stuttgart.de
 
-## Acknowledgments
+<!-- ## Acknowledgments
 
-This package implements mean-field Poisson-Boltzmann theory for colloidal suspensions, building on established theoretical frameworks in colloid science and statistical mechanics.
+This package implements mean-field Poisson-Boltzmann theory for colloidal suspensions, building on established theoretical frameworks in colloid science and statistical mechanics. -->
