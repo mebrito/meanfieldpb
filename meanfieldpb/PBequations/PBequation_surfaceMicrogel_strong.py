@@ -18,6 +18,7 @@
 #
 import numpy as np
 
+
 def f_diff_eq(r, y, y_prime, kresa, Zlba, gamma):
     """
     Function that defines the second derivative in the differential
@@ -32,9 +33,10 @@ def f_diff_eq(r, y, y_prime, kresa, Zlba, gamma):
         np.where(
             (r > gamma) & (r < 1),
             -2 * y_prime / r + kresa * kresa * np.sinh(y) - 3 * Zlba / (1 - gamma**3),
-            -2 * y_prime / r + kresa * kresa * np.sinh(y)
-        )
+            -2 * y_prime / r + kresa * kresa * np.sinh(y),
+        ),
     )
+
 
 # Define the ODE system
 def odes(r, y, p):
@@ -50,6 +52,7 @@ def odes(r, y, p):
     dydr[0] = y[1]
     dydr[1] = f_diff_eq(r, y[0], y[1], kresa, Zlba, gamma)
     return dydr
+
 
 # Define the boundary conditions
 def boundary_conditions(ya, yb):

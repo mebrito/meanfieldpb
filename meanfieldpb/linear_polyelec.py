@@ -24,7 +24,10 @@ import math
 from meanfieldpb.suspension import Suspension
 from meanfieldpb.PBequations import PBequation_linearPolyelectrolyte_strong as PBlinPoly
 
-def solve_nonlin_PB_limPoly(r: np.array, y_init: np.array, kappa: float, xi: float) -> 'scipy.integrate.OdeSolution':
+
+def solve_nonlin_PB_limPoly(
+    r: np.array, y_init: np.array, kappa: float, xi: float
+) -> "scipy.integrate.OdeSolution":
     """
     Solve the nonlinear Poisson-Boltzmann equation for a linear polyelectrolyte.
 
@@ -42,29 +45,33 @@ def solve_nonlin_PB_limPoly(r: np.array, y_init: np.array, kappa: float, xi: flo
     Returns:
     --------
     scipy.integrate.OdeSolution
-        The solution of the boundary value problem (BVP) for the nonlinear 
+        The solution of the boundary value problem (BVP) for the nonlinear
         Poisson-Boltzmann equation.
 
     Description:
     ------------
-    This function uses the `solve_bvp` method from `scipy.integrate` to solve 
-    the nonlinear Poisson-Boltzmann equation. The differential equations and 
-    boundary conditions are defined in the `PBlinPoly` module. The solution 
-    provides the electric potential and its derivative (electric field) as 
+    This function uses the `solve_bvp` method from `scipy.integrate` to solve
+    the nonlinear Poisson-Boltzmann equation. The differential equations and
+    boundary conditions are defined in the `PBlinPoly` module. The solution
+    provides the electric potential and its derivative (electric field) as
     functions of the radial distance.
     """
-    return solve_bvp(lambda r, y: PBlinPoly.odes(r, y, kappa), 
-                        lambda ya, yb: PBlinPoly.boundary_conditions(ya, yb, xi), r, y_init)
-        
-        
+    return solve_bvp(
+        lambda r, y: PBlinPoly.odes(r, y, kappa),
+        lambda ya, yb: PBlinPoly.boundary_conditions(ya, yb, xi),
+        r,
+        y_init,
+    )
+
+
 @dataclass
 class LinearPolyelectrolyte(Suspension):
     """
     LinearPolyelectrolyte
     A class representing a linear polyelectrolyte suspension system. This class
     inherits from the Suspension class and provides methods to calculate various
-    properties of the system, such as the number of ions, condensed particles, 
-    and system salt concentration, as well as solving the nonlinear Poisson-Boltzmann 
+    properties of the system, such as the number of ions, condensed particles,
+    and system salt concentration, as well as solving the nonlinear Poisson-Boltzmann
     equation.
     Attributes:
         a (int): Polyelectrolyte radius in nanometers [nm].
@@ -111,39 +118,37 @@ class LinearPolyelectrolyte(Suspension):
         system_salt_conc():
             Calculates the system salt concentration in molars [M].
         total_charge(r: float):
-            Calculates the total charge per unit length of the system.    
+            Calculates the total charge per unit length of the system.
     """
 
-    a: int # polyelectrolyte radius
-    Z: int # linear charge density in units of [1/a]
-    lb: int # Bjerrum length in units of [a]
-    surf_frac: int # volume fraction
-    c_salt: int # reservoir salt concentration in [M]
-    
+    a: int  # polyelectrolyte radius
+    Z: int  # linear charge density in units of [1/a]
+    lb: int  # Bjerrum length in units of [a]
+    surf_frac: int  # volume fraction
+    c_salt: int  # reservoir salt concentration in [M]
+
     def __init__(self, a, Z, lb, surf_frac, c_salt):
-        Suspension.__init__(self, a, Z, lb, c_salt, 'strong')
+        Suspension.__init__(self, a, Z, lb, c_salt, "strong")
         self._surf_frac = surf_frac
-        self._R_cell = a / surf_frac**(1./2)
-        self.c_tilde = c_salt * self.conversion_factor # in number of particles per nm^3
+        self._R_cell = a / surf_frac ** (1.0 / 2)
+        self.c_tilde = (
+            c_salt * self.conversion_factor
+        )  # in number of particles per nm^3
         self.kappaa = self._screening_(self.c_tilde)
         self.xi = self.Z * self.a
         self._system_volume = math.pi * (self.R_cell**2 - self.a**2)
 
-
     @property
     def surf_frac(self):
         return self._surf_frac
-    
 
     @property
     def R_cell(self):
         return self._R_cell
-    
 
     @property
     def system_volume(self):
         return self._system_volume
-    
 
     def set_grid(self, r: np.array):
         """
@@ -171,8 +176,9 @@ class LinearPolyelectrolyte(Suspension):
         assert self.r[0] >= self.a, "First component of the grid larger or equal to a"
 
         # Assert if all components are smaller or equal than the cell radius
-        assert self.r[-1] <= self.R_cell, "Last component of the grid smaller than R_coll"
-
+        assert self.r[-1] <= self.R_cell, (
+            "Last component of the grid smaller than R_coll"
+        )
 
     def solve_nonlin_PB(self, r, y_init):
         """
@@ -192,17 +198,17 @@ class LinearPolyelectrolyte(Suspension):
 
         Description:
         ------------
-        This method solves the nonlinear Poisson-Boltzmann equation for the system. 
-        It first sets the radial grid using the `set_grid` method and normalizes the 
-        grid by the polyelectrolyte radius (`a`). The `solve_nonlin_PB_limPoly` function 
-        is then used to solve the equation, providing the electric potential and electric 
-        field as solutions. The results are stored in the `elec_pot` and `elec_field` 
+        This method solves the nonlinear Poisson-Boltzmann equation for the system.
+        It first sets the radial grid using the `set_grid` method and normalizes the
+        grid by the polyelectrolyte radius (`a`). The `solve_nonlin_PB_limPoly` function
+        is then used to solve the equation, providing the electric potential and electric
+        field as solutions. The results are stored in the `elec_pot` and `elec_field`
         attributes of the class.
 
         Notes:
         ------
         - The radial distances must be provided in units of the polyelectrolyte radius (`a`).
-        - The screening parameter (`kappaa`) and coupling parameter (`xi`) must be set 
+        - The screening parameter (`kappaa`) and coupling parameter (`xi`) must be set
         before calling this method.
 
         Example:
@@ -215,14 +221,13 @@ class LinearPolyelectrolyte(Suspension):
         # For solving the PB equation, distances should be given in units of self.a
         self.set_grid(r)
         r_ = r / self.a
-        if self.kappaa!=None and self.xi!=None:
+        if (self.kappaa is not None) and (self.xi is not None):
             solution = solve_nonlin_PB_limPoly(r_, y_init, self.kappaa, self.xi)
             sol = solution.sol(r_)
             self.elec_pot = sol[0]
             self.elec_field = sol[1]
         else:
-            print('Error: kappaa and xi are equal to None. Set them.') 
-
+            print("Error: kappaa and xi are equal to None. Set them.")
 
     def _geometry_differentrial(self, x):
         """
@@ -242,8 +247,7 @@ class LinearPolyelectrolyte(Suspension):
             return np.array([2 * math.pi * x_val for x_val in x])
         else:
             return 2 * math.pi * x
-        
-    
+
     def N_cations(self):
         """
         Calculate the total number of cations in the system over the full range of radial distances.
@@ -256,7 +260,6 @@ class LinearPolyelectrolyte(Suspension):
 
         return self._N_syst(self.cation_density(), self._geometry_differentrial)
 
-
     def N_anions(self):
         """
         Calculate the total number of anions in the system over the full range of radial distances.
@@ -268,7 +271,6 @@ class LinearPolyelectrolyte(Suspension):
         """
 
         return self._N_syst(self.anion_density(), self._geometry_differentrial)
-    
 
     def _N_condensed(self, R_M, species_density):
         """
@@ -293,20 +295,21 @@ class LinearPolyelectrolyte(Suspension):
 
         Description:
         ------------
-        This method computes the number of condensed particles of a given species 
-        within the Manning radius (`R_M`). It integrates the species density profile 
-        over the radial grid up to `R_M`, taking into account the differential geometry 
+        This method computes the number of condensed particles of a given species
+        within the Manning radius (`R_M`). It integrates the species density profile
+        over the radial grid up to `R_M`, taking into account the differential geometry
         factor and a conversion factor to ensure the result is in the correct units.
         """
 
         if self.r[0] <= R_M <= self.r[-1]:
-            r_ = self.r[self.r<=R_M]
-            dens_ = species_density[self.r<=R_M]
-            N_condensed = simpson(self.conversion_factor * dens_ * self._geometry_differentrial(r_), r_)
+            r_ = self.r[self.r <= R_M]
+            dens_ = species_density[self.r <= R_M]
+            N_condensed = simpson(
+                self.conversion_factor * dens_ * self._geometry_differentrial(r_), r_
+            )
             return N_condensed
         else:
             raise ValueError("Invalid R_M. It must fall within the system domain.")
-
 
     def N_condensed_cations(self, R_M):
         """
@@ -324,7 +327,6 @@ class LinearPolyelectrolyte(Suspension):
         """
 
         return self._N_condensed(R_M, self.cation_density())
-    
 
     def N_condensed_anions(self, R_M):
         """
@@ -342,7 +344,6 @@ class LinearPolyelectrolyte(Suspension):
         """
 
         return self._N_condensed(R_M, self.anion_density())
-    
 
     def system_salt_conc(self):
         """
@@ -355,14 +356,13 @@ class LinearPolyelectrolyte(Suspension):
 
         Description:
         ------------
-        This method computes the system salt concentration by dividing the total 
-        number of anions (`N_anions`) by the system volume. The result is then 
+        This method computes the system salt concentration by dividing the total
+        number of anions (`N_anions`) by the system volume. The result is then
         converted to molars using the `conversion_factor` attribute.
         """
 
         salt_conc = self.N_anions() / self.system_volume
         return salt_conc / self.conversion_factor
-    
 
     def total_charge(self, r):
         """
@@ -380,14 +380,17 @@ class LinearPolyelectrolyte(Suspension):
 
         Description:
         ------------
-        This method computes the total charge per unit length of the system by considering 
-        the contributions from the condensed cations and anions within the given radius (`r`). 
+        This method computes the total charge per unit length of the system by considering
+        the contributions from the condensed cations and anions within the given radius (`r`).
         The calculation is normalized by the linear charge density (`Z`) of the polyelectrolyte.
         """
 
-        return (-self.Z + self._N_condensed(r, self.cation_density())
-                - self._N_condensed(r, self.anion_density())) / self.Z
-    
+        return (
+            -self.Z
+            + self._N_condensed(r, self.cation_density())
+            - self._N_condensed(r, self.anion_density())
+        ) / self.Z
+
     def lin_elec_pot(self, r):
         return super().lin_elec_pot(r)
 

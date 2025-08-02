@@ -18,15 +18,23 @@
 #
 import numpy as np
 
+
 def f_diff_eq(r, y, y_prime, kresa, k0_aa, xi_a, k0_ab, xi_b):
     """
     Function that defines the second derivative in the differential
     equation y'' = f(r, y, y'; kresa, k0_aa, xi_a, k0_ab, xi_b)
-    
-    All quantities should be in reduced units. 
+
+    All quantities should be in reduced units.
     """
-    return np.where(r<1, -2 * y_prime / r + kresa * kresa * np.sinh(y) + k0_aa * k0_aa / (xi_a * np.exp(-y) + 1) - k0_ab * k0_ab * xi_b * np.exp(-y) / (xi_b * np.exp(-y) + 1),
-                         -2 * y_prime / r + kresa * kresa * np.sinh(y))
+    return np.where(
+        r < 1,
+        -2 * y_prime / r
+        + kresa * kresa * np.sinh(y)
+        + k0_aa * k0_aa / (xi_a * np.exp(-y) + 1)
+        - k0_ab * k0_ab * xi_b * np.exp(-y) / (xi_b * np.exp(-y) + 1),
+        -2 * y_prime / r + kresa * kresa * np.sinh(y),
+    )
+
 
 # Define the ODE system
 def odes(r, y, p):
@@ -44,6 +52,7 @@ def odes(r, y, p):
     # dydr[1] = np.where(r<1, -2 * y[1] / r + kresa * kresa * np.sinh(y[0]) + k0_aa * k0_aa / (xi_a * np.exp(-y[0]) + 1) - k0_ab * k0_ab * xi_b * np.exp(-y[0]) / (xi_b * np.exp(-y[0]) + 1),
     #                         -2 * y[1] / r + kresa * kresa * np.sinh(y[0]))
     return dydr
+
 
 # Define the boundary conditions
 def boundary_conditions(ya, yb):

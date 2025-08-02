@@ -21,24 +21,25 @@ from scipy.integrate import simpson
 import math
 from abc import ABC, abstractmethod
 
+
 class Suspension(ABC):
     """
     Base class for modeling electrostatic interactions in colloidal suspensions.
-    
+
     This class provides the fundamental framework for solving Poisson-Boltzmann equations
     in various particle suspension systems. It implements the cell model approach where
     particles are arranged in a periodic structure, allowing calculation of electrostatic
     potential, electric field, and ion density distributions.
-    
+
     The class handles both strong and weak electrolytes and provides methods for
     calculating key physical properties such as screening parameters, ion densities,
     and total particle numbers.
-    
+
     Parameters
     ----------
     a : float
         Particle radius in nanometers [nm].
-    Z : float  
+    Z : float
         Particle charge in units of the fundamental charge e.
     lb : float
         Bjerrum length in nanometers [nm]. The distance at which thermal energy
@@ -47,7 +48,7 @@ class Suspension(ABC):
         Reservoir salt concentration in molars [M].
     charge_type : str
         Type of particle charge - 'strong' or 'weak' electrolyte.
-        
+
     Attributes
     ----------
     a : float
@@ -70,7 +71,7 @@ class Suspension(ABC):
         Dimensionless electric potential φ(r).
     elec_field : numpy.ndarray or None
         Dimensionless electric field φ'(r).
-        
+
     Notes
     -----
     The Bjerrum length is defined as lb = e²/(4πε₀εᵣkᵦT), where:
@@ -79,20 +80,22 @@ class Suspension(ABC):
     - εᵣ is the relative permittivity of water (~80)
     - kᵦ is Boltzmann constant
     - T is temperature
-    
+
     At room temperature in water, lb ≈ 0.71 nm.
-    
+
     Examples
     --------
     This is an abstract base class. Use specific implementations like:
-    
+
     >>> from src import colloid
     >>> suspension = colloid.Colloid(50, 100, 0.71, 0.01, 0.001, 'strong')
     >>> print(f"Charge parameter: {suspension.Zlba:.2f}")
     """
 
-    _conversion_factor = 6.02214/10 # If the quatity is in molar, multiplication by this factor gives density in number of particles per nm^3
-    
+    _conversion_factor = (
+        6.02214 / 10
+    )  # If the quatity is in molar, multiplication by this factor gives density in number of particles per nm^3
+
     def __init__(self, a, Z, lb, c_salt, charge_type):
         """
         Base class for Suspension systems.
@@ -103,7 +106,7 @@ class Suspension(ABC):
         lb (float): Bjerrum length in [nm].
         c_salt (float): reservoir salt concentration in molars [M].
         charge_type (str): type of particle charge - 'strong' or 'weak'.
-        
+
         Attributes:
         R_cell (float): cell radius in [nm].
         r (np.array): radial grid.
@@ -115,49 +118,40 @@ class Suspension(ABC):
         self._lb = lb
         self._c_salt = c_salt
         self._charge_type = charge_type
-        
+
         self._Zlba = self.Z * self.lb / self.a
 
         self.r = None  # Initialize radial grid r to None
         self.elec_pot = None  # Initialize electric potential elec_pot to None
         self.elec_field = None  # Initialize electric field elec_field to None
 
-
-
     @property
     def a(self):
         return self._a
-    
 
     @property
     def Z(self):
         return self._Z
-    
 
     @property
     def lb(self):
         return self._lb
-    
 
     @property
     def c_salt(self):
         return self._c_salt
-    
 
     @property
     def charge_type(self):
         return self._charge_type
-    
 
     @property
     def Zlba(self):
         return self._Zlba
-    
 
     @property
     def conversion_factor(self):
         return self._conversion_factor
-    
 
     def get_r(self):
         """
@@ -171,8 +165,7 @@ class Suspension(ABC):
         if self.r is not None:
             return self.pot
         else:
-            raise ValueError("Grid r not set.")    
-
+            raise ValueError("Grid r not set.")
 
     def get_elec_pot(self):
         """
@@ -188,7 +181,6 @@ class Suspension(ABC):
         else:
             raise ValueError("Undefined electric potential.")
 
-
     def get_elec_field(self):
         """
         Retrieve the electric field of the system.
@@ -202,7 +194,6 @@ class Suspension(ABC):
             return self.elec_field
         else:
             raise ValueError("Undefined electric field.")
-
 
     def _screening_(self, c_tilde):
         """
@@ -228,10 +219,9 @@ class Suspension(ABC):
         and `a` is the particle radius.
         """
         return math.sqrt(8 * math.pi * self.lb * c_tilde) * self.a
-    
 
     def cation_density(self):
-        """ 
+        """
         Calculate the cation density profile in the system.
 
         Returns:
@@ -256,13 +246,14 @@ class Suspension(ABC):
         """
 
         if self.elec_pot is not None:
-            return self.c_salt * np.exp(- self.elec_pot)
+            return self.c_salt * np.exp(-self.elec_pot)
         else:
-            raise ValueError("Undefined electric potential. Obtain it by solving Poisson-Boltzmann equation.")
-        
+            raise ValueError(
+                "Undefined electric potential. Obtain it by solving Poisson-Boltzmann equation."
+            )
 
     def anion_density(self):
-        """ 
+        """
         Calculate the anion density profile in the system.
 
         Returns:
@@ -289,9 +280,10 @@ class Suspension(ABC):
         if self.elec_pot is not None:
             return self.c_salt * np.exp(self.elec_pot)
         else:
-            raise ValueError("Undefined electric potential. Obtain it by solving Poisson-Boltzmann equation.")
+            raise ValueError(
+                "Undefined electric potential. Obtain it by solving Poisson-Boltzmann equation."
+            )
 
-    
     def _N_syst(self, species_density, geometry_differentrial):
         """
         Calculate the total number of particles in the system over the full range of `r`.
@@ -311,25 +303,28 @@ class Suspension(ABC):
             of the species density, the geometry differential, and a conversion factor over `r`.
         """
 
-        N_system = simpson(self.conversion_factor * species_density * geometry_differentrial(self.r), self.r)
+        N_system = simpson(
+            self.conversion_factor * species_density * geometry_differentrial(self.r),
+            self.r,
+        )
 
         return N_system
-    
+
     @abstractmethod
     def lin_elec_pot(self, r):
         """
         Abstract method to compute the linearized electric potential.
-        
+
         Parameters:
         -----------
         r : np.array
             Radial grid for the solution of the Poisson-Boltzmann equation.
-        
+
         Returns:
         --------
         np.array
             Linearized electric potential.
-        
+
         Description:
         ------------
         This method must be implemented in subclasses to compute the linearized electric potential

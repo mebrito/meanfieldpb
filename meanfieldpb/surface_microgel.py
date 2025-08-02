@@ -16,15 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from dataclasses import dataclass, field
 from meanfieldpb.suspension import Suspension
 from meanfieldpb.weak_particle import WeakParticle
 import numpy as np
 from scipy.integrate import solve_bvp
-import numpy as np
 import math
 from meanfieldpb.util import reservoir_concent
 from meanfieldpb.PBequations import PBequation_surfaceMicrogel_strong as PBstrong
+
 
 class SurfaceMicrogel(Suspension, WeakParticle):
     """
@@ -33,25 +32,46 @@ class SurfaceMicrogel(Suspension, WeakParticle):
     a: float # Particle (external) radius in [nm]
     b: float # Particle (internal) radius in [nm] (b < a)
     """
-    def __init__(self, a, b, Z_a, Z_b, lb, vol_frac, c_salt, charge_type, pK_a=4, pK_b=4, pH_res=7):
-        self.b = b
-        Suspension.__init__(self, a, Z_b-Z_a, lb, c_salt, charge_type)
 
-        if self.charge_type=='strong':
-            self._c_tilde = c_salt * self.conversion_factor # in number of particles per nm^3
+    def __init__(
+        self,
+        a,
+        b,
+        Z_a,
+        Z_b,
+        lb,
+        vol_frac,
+        c_salt,
+        charge_type,
+        pK_a=4,
+        pK_b=4,
+        pH_res=7,
+    ):
+        self.b = b
+        Suspension.__init__(self, a, Z_b - Z_a, lb, c_salt, charge_type)
+
+        if self.charge_type == "strong":
+            self._c_tilde = (
+                c_salt * self.conversion_factor
+            )  # in number of particles per nm^3
             self._k0_aa = None
             self._k0_ab = None
-        elif self.charge_type=='weak':
+        elif self.charge_type == "weak":
             WeakParticle.__init__(self, Z_a, Z_b, pK_a, pK_b, pH_res)
-            self._c_tilde = reservoir_concent(self.c_Hres, self.c_salt, self.c_ref) * self.conversion_factor
+            self._c_tilde = (
+                reservoir_concent(self.c_Hres, self.c_salt, self.c_ref)
+                * self.conversion_factor
+            )
             self._k0_aa = math.sqrt(3 * self.lb * self.Z_a / self.a)
             self._k0_ab = math.sqrt(3 * self.lb * self.Z_b / self.a)
 
         self._vol_frac = vol_frac
-        self._R_cell = a / vol_frac**(1./3)
+        self._R_cell = a / vol_frac ** (1.0 / 3)
         self._kresa = self._screening_(self.c_tilde)
         self._gamma = self.b / self.a
-        assert self._gamma < 1, "The internal radius should be smaller than the external radius."
+        assert self._gamma < 1, (
+            "The internal radius should be smaller than the external radius."
+        )
         assert self._gamma > 0, "Internal and external radii should be larger than 0."
 
     @property
@@ -77,7 +97,7 @@ class SurfaceMicrogel(Suspension, WeakParticle):
     @property
     def k0_ab(self):
         return self._k0_ab
-    
+
     @property
     def gamma(self):
         return self._gamma
@@ -95,21 +115,29 @@ class SurfaceMicrogel(Suspension, WeakParticle):
         assert self.r[0] >= 0, "First component of the grid larger than 0"
 
         # Assert if all components are smaller or equal than the cell radius
-        assert self.r[-1] <= self.R_cell, "Last component of the grid smaller than R_coll"
+        assert self.r[-1] <= self.R_cell, (
+            "Last component of the grid smaller than R_coll"
+        )
 
-    
     def solve_nonlin_PB(self, r, y_init):
-        """
-        """
+        """ """
         # For solving the PB equation, distances should be given in units of self.a
         r = r / self.a
-        if self.charge_type=='strong':
+        if self.charge_type == "strong":
             params = np.array([self.kresa, self.Zlba, self.gamma])
-            solution = solve_bvp(lambda r, y: PBstrong.odes(r, y, params), 
-                        lambda ya, yb: PBstrong.boundary_conditions(ya, yb), r, y_init)
-        
-        assert solution.p==None, "Parameters of the Poisson-Boltzmann equation have been fitted."
-        assert solution.success==0, "The solution of the Poisson-Boltzmann equation was not successful."
+            solution = solve_bvp(
+                lambda r, y: PBstrong.odes(r, y, params),
+                lambda ya, yb: PBstrong.boundary_conditions(ya, yb),
+                r,
+                y_init,
+            )
+
+        assert solution.p is None, (
+            "Parameters of the Poisson-Boltzmann equation have been fitted."
+        )
+        assert solution.success == 0, (
+            "The solution of the Poisson-Boltzmann equation was not successful."
+        )
         sol = solution.sol(r)
         self.elec_pot = sol[0]
         self.elec_field = sol[1]

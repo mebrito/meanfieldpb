@@ -2,10 +2,9 @@
 MeanFieldPB: A Python package for solving Poisson-Boltzmann equations in colloidal suspensions.
 
 This package provides tools for modeling electrostatics of
-suspensions of colloids, surface microgels, volume microgels, and 
+suspensions of colloids, surface microgels, volume microgels, and
 linear polyelectrolytes using mean-field Poisson-Boltzmann theory.
 """
-
 
 # Import particle-specific classes
 try:
@@ -19,7 +18,7 @@ except ImportError:
     pass
 
 try:
-    from .volume_microgel import VolumeMicrogel  
+    from .volume_microgel import VolumeMicrogel
 except ImportError:
     pass
 
@@ -33,11 +32,11 @@ __author__ = "Mariano E. Brito"
 __email__ = "mbrito@icp.uni-stuttgart.de"
 
 __all__ = [
-    'Suspension',
-    'Colloid', 
-    'SurfaceMicrogel',
-    'VolumeMicrogel', 
-    'LinearPolyelectrolyte',
-    'WeakParticle',
-    'reservoir_concent'
+    "Suspension",
+    "Colloid",
+    "SurfaceMicrogel",
+    "VolumeMicrogel",
+    "LinearPolyelectrolyte",
+    "WeakParticle",
+    "reservoir_concent",
 ]

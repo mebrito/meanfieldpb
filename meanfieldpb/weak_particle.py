@@ -17,7 +17,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-class WeakParticle():
+
+class WeakParticle:
     """
     Base class for containing parameters relative to weak charges.
 
@@ -51,14 +52,14 @@ class WeakParticle():
 
     Description:
     ------------
-    The `WeakParticle` class provides a framework for modeling particles with weak charges. 
-    It initializes key parameters such as the maximum charges from acid and basic sites, 
-    dissociation constants, and reservoir pH. The class also calculates derived attributes 
-    like the reservoir hydrogen ion concentration (`c_Hres`) and dissociation constants 
+    The `WeakParticle` class provides a framework for modeling particles with weak charges.
+    It initializes key parameters such as the maximum charges from acid and basic sites,
+    dissociation constants, and reservoir pH. The class also calculates derived attributes
+    like the reservoir hydrogen ion concentration (`c_Hres`) and dissociation constants
     (`Ka` and `Kb`) based on the input parameters.
     """
 
-    c_ref = 1 # reference concentration [M]
+    c_ref = 1  # reference concentration [M]
 
     def __init__(self, Z_a, Z_b, pK_a, pK_b, pH_res) -> None:
         self.Z_a = Z_a
@@ -67,9 +68,9 @@ class WeakParticle():
         self.pK_b = pK_b
         self.pH_res = pH_res
 
-        self.c_Hres = self.c_ref * 10**(-pH_res)
-        self.Ka = self.c_ref * 10^(-self.pK_a); # K = K_a,acid*c_ref
-        self.Kb = self.c_ref * 10^(-self.pK_b); # K = K_a,basic*c_ref
+        self.c_Hres = self.c_ref * 10 ** (-pH_res)
+        self.Ka = self.c_ref * 10 ^ (-self.pK_a)  # K = K_a,acid*c_ref
+        self.Kb = self.c_ref * 10 ^ (-self.pK_b)  # K = K_a,basic*c_ref
 
-        self.xi_a = self.c_Hres/self.Ka
-        self.xi_b = self.c_Hres/self.Kb
+        self.xi_a = self.c_Hres / self.Ka
+        self.xi_b = self.c_Hres / self.Kb

@@ -18,14 +18,16 @@
 #
 import numpy as np
 
+
 def f_diff_eq(r, y, y_prime, kappa):
     """
     Function that defines the second derivative in the differential
     equation y'' = f(r, y, y'; kappa)
-    
-    All quantities should be in reduced units. 
+
+    All quantities should be in reduced units.
     """
-    return - y_prime / r + kappa * kappa * np.sinh(y)
+    return -y_prime / r + kappa * kappa * np.sinh(y)
+
 
 # Define the ODE system
 def odes(r, y, kappa):
@@ -42,6 +44,7 @@ def odes(r, y, kappa):
     dydr[1] = f_diff_eq(r, y[0], y[1], kappa)
 
     return dydr
+
 
 # Define the boundary conditions
 def boundary_conditions(ya, yb, xi):

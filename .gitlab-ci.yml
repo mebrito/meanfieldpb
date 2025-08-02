@@ -2,9 +2,9 @@
 image: python:latest 
 
 stages:
-  - build
+  - run
   - test
-  # - deploy
+  - deploy
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -21,19 +21,41 @@ before_script:
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
-  # Install dependencies
   - pip install -r requirements.txt
+  - python3 -m pip install -e .
 
-build:
-  stage: build
+run:
+  stage: run
   script:
-    - echo "Building project..."
+    - |
+      cat <<EOF > version.py
+      import meanfieldpb
+      print(f"MeanFieldPB version: {meanfieldpb.__version__}")
+      EOF
+    - python3 version.py
+    - |
+      cat <<EOF > colloid.py
+      from meanfieldpb.colloid import Colloid
+      colloid = Colloid(a=50, Z=100, lb=0.71, vol_frac=0.001, c_salt=0.0001, charge_type='strong')
+      print(f"Cell radius: {colloid.R_cell:.2f} nm")
+      EOF
+    - python3 colloid.py
+    - |
+      cat <<EOF > import_modules.py
+      from meanfieldpb.colloid import Colloid
+      from meanfieldpb.volume_microgel import VolumeMicrogel
+      from meanfieldpb.surface_microgel import SurfaceMicrogel
+      from meanfieldpb.linear_polyelec import LinearPolyelectrolyte
+      print("Modules imported successfully.")
+      EOF
+    - python3 import_modules.py
   tags:
     - docker
 
 test:
   stage: test
   script:
+    - pip install pytest
     - echo "Running tests..."
     - python3 -m unittest discover -s tests -p "*_test.py"
   tags:
@@ -43,10 +65,15 @@ test:
   #   reports:
   #     junit: junit.xml  # optional, for test reports if you generate them
 
-# deploy:
-#   stage: deploy
-#   only:
-#     - main  # Only deploy on pushes to the main branch
-#   script:
-#     - echo "Deploying Python app..."
-#     # Insert your real deployment commands here
+deploy:
+  stage: deploy
+  only:
+    - main  # Only deploy on pushes to the main branch
+  script:
+    - echo "Deploying Python app..."
+    - python3 samples/linear_polymer_sample.py
+    - python3 samples/surface_microgel_sample.py
+    - python3 samples/volume_microgel_sample.py
+  tags:
+    - docker
+    
