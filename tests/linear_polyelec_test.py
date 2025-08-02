@@ -19,12 +19,9 @@
 import unittest as ut
 import numpy as np
 import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
-sys.path.append(os.path.dirname(__file__))
-from PBequations import PBequation_linearPolyelectrolyte_strong as PBlinPoly
-import linear_polyelec
+from meanfieldpb.PBequations import PBequation_linearPolyelectrolyte_strong as PBlinPoly
+from meanfieldpb import linear_polyelec
 
 
 def test_PBeq(r, phi, phi_prime, param):

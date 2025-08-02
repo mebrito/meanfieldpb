@@ -18,12 +18,9 @@
 #
 import unittest as ut
 import numpy as np
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
-from PBequations import PBequation_colloid_strong as PBstrong
-import colloid
+from meanfieldpb.PBequations import PBequation_colloid_strong as PBstrong
+from meanfieldpb import colloid
 
 # import matplotlib.pyplot as plt
 

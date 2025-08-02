@@ -41,10 +41,8 @@ Outputs:
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
-import linear_polyelec
+from meanfieldpb import linear_polyelec
 
 colors = ['tab:blue', 'tab:red']
 font_size = 15

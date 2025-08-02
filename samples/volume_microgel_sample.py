@@ -43,10 +43,8 @@ Outputs:
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
-import volume_microgel
+from meanfieldpb import volume_microgel
 
 colors = ['tab:blue', 'tab:red']
 font_size = 15

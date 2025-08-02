@@ -17,14 +17,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from dataclasses import dataclass, field
-from suspension import Suspension
-from weak_particle import WeakParticle
+from meanfieldpb.suspension import Suspension
+from meanfieldpb.weak_particle import WeakParticle
 import numpy as np
 from scipy.integrate import solve_bvp
 import numpy as np
 import math
 from util import reservoir_concent
-from PBequations import PBequation_surfaceMicrogel_strong as PBstrong
+from meanfieldpb.PBequations import PBequation_surfaceMicrogel_strong as PBstrong
 
 class SurfaceMicrogel(Suspension, WeakParticle):
     """

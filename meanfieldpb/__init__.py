@@ -6,9 +6,6 @@ suspensions of colloids, surface microgels, volume microgels, and
 linear polyelectrolytes using mean-field Poisson-Boltzmann theory.
 """
 
-from .suspension import Suspension
-from .util import reservoir_concent
-from .weak_particle import WeakParticle
 
 # Import particle-specific classes
 try:

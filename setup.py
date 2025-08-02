@@ -29,8 +29,7 @@ setup(
     license="GNU GPLv3",
     
     # Package discovery
-    packages=find_packages(where="meanfieldpb"),
-    package_dir={"": "meanfieldpb"},
+    packages=find_packages(),
     
     # Python version requirement
     python_requires=">=3.7",

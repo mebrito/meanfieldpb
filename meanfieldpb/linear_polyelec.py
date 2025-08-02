@@ -21,8 +21,8 @@ import numpy as np
 from scipy.integrate import solve_bvp
 from scipy.integrate import simpson
 import math
-from suspension import Suspension
-from PBequations import PBequation_linearPolyelectrolyte_strong as PBlinPoly
+from meanfieldpb.suspension import Suspension
+from meanfieldpb.PBequations import PBequation_linearPolyelectrolyte_strong as PBlinPoly
 
 def solve_nonlin_PB_limPoly(r: np.array, y_init: np.array, kappa: float, xi: float) -> 'scipy.integrate.OdeSolution':
     """

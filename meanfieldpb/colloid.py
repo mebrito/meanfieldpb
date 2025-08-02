@@ -16,10 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from suspension import Suspension
+from meanfieldpb.suspension import Suspension
 import numpy as np
 from scipy.integrate import solve_bvp
-from PBequations import PBequation_colloid_strong as PBstrong
+from meanfieldpb.PBequations import PBequation_colloid_strong as PBstrong
 
 class Colloid(Suspension):
     """

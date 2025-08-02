@@ -16,15 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from suspension import Suspension
-from weak_particle import WeakParticle
+from meanfieldpb.suspension import Suspension
+from meanfieldpb.weak_particle import WeakParticle
 import numpy as np
 from scipy.integrate import solve_bvp
 import math
-from PBequations import PBequation_volumeMicrogel_strong as PBstrong
-from PBequations import PBequation_volumeMicrogel_weak as PBweak
+from meanfieldpb.PBequations import PBequation_volumeMicrogel_strong as PBstrong
+from meanfieldpb.PBequations import PBequation_volumeMicrogel_weak as PBweak
 from util import reservoir_concent
-from LinearPB.linear_volume_microgel_weak import LinearVolumeMicrogelWeak
+from meanfieldpb.LinearPB.linear_volume_microgel_weak import LinearVolumeMicrogelWeak
 
 class VolumeMicrogel(Suspension,WeakParticle):
     """

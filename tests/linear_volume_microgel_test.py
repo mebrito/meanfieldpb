@@ -22,11 +22,8 @@ import numpy as np
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
-from PBequations import PBequation_volumeMicrogel_strong as PBstrong
-from PBequations import PBequation_volumeMicrogel_weak as PBweak
-from LinearPB.linear_volume_microgel_weak import LinearVolumeMicrogelWeak, variables
-import volume_microgel
+from meanfieldpb.LinearPB.linear_volume_microgel_weak import variables
+from meanfieldpb import volume_microgel
 
 def test_PBeq(r, a, phi, phi_prime, f_diff_eq):
     """

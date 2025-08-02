@@ -18,12 +18,9 @@
 #
 import unittest as ut
 import numpy as np
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'meanfieldpb'))
-from PBequations import PBequation_surfaceMicrogel_strong as PBstrong
-import surface_microgel
+from meanfieldpb.PBequations import PBequation_surfaceMicrogel_strong as PBstrong
+from meanfieldpb import surface_microgel
 
 
 def test_PBeq(r, phi, phi_prime, f_diff_eq, param):
